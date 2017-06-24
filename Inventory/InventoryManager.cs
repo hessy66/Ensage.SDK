@@ -4,6 +4,7 @@
 
 namespace Ensage.SDK.Inventory
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel.Composition;
@@ -13,6 +14,7 @@ namespace Ensage.SDK.Inventory
     using Ensage.SDK.Extensions;
     using Ensage.SDK.Helpers;
     using Ensage.SDK.Inventory.Metadata;
+    using Ensage.SDK.Persistence;
     using Ensage.SDK.Service;
 
     using log4net;
@@ -20,6 +22,12 @@ namespace Ensage.SDK.Inventory
     using PlaySharp.Toolkit.Logging;
 
     using Inventory = Ensage.Inventory;
+
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class ItemBindingAttribute : Attribute
+    {
+    }
 
     [ExportInventoryManager]
     public class InventoryManager : ControllableService, IInventoryManager
@@ -54,7 +62,23 @@ namespace Ensage.SDK.Inventory
 
         public Unit Owner { get; }
 
+        private Dictionary<Type, List<PropertyBinding>> Bindings { get; } = new Dictionary<Type, List<PropertyBinding>>();
+
         private HashSet<InventoryItem> LastItems { get; set; }
+
+        public void Attach(object target)
+        {
+            var targetType = target.GetType();
+
+            foreach (var property in targetType.GetProperties())
+            {
+                var attribute = property.GetCustomAttribute<ItemBindingAttribute>();
+                if (attribute != null)
+                {
+                    this.CreateBinding(property, target);
+                }
+            }
+        }
 
         public StockInfo GetStockInfo(AbilityId id, Team team = Team.Undefined)
         {
@@ -81,6 +105,23 @@ namespace Ensage.SDK.Inventory
             UpdateManager.Unsubscribe(this.OnInventoryClear);
         }
 
+        private PropertyBinding CreateBinding(PropertyInfo prop, object target)
+        {
+            var itemType = prop.PropertyType;
+            var targetType = target.GetType();
+            var binding = new PropertyBinding(prop, target);
+
+            if (!this.Bindings.ContainsKey(itemType))
+            {
+                this.Bindings[itemType] = new List<PropertyBinding>();
+            }
+
+            Log.Debug($"Attach-Item: {itemType.Name} @ {targetType.Name}.{prop.Name}");
+            this.Bindings[itemType].Add(binding);
+
+            return binding;
+        }
+
         private void OnInventoryClear()
         {
             this.items = null;
@@ -88,7 +129,7 @@ namespace Ensage.SDK.Inventory
 
         private void OnInventoryUpdate()
         {
-            if (this.CollectionChanged != null)
+            //if (this.CollectionChanged != null)
             {
                 // TODO: investigate arc ult item changes
                 var added = this.Items.Except(this.LastItems).ToList();
@@ -97,21 +138,55 @@ namespace Ensage.SDK.Inventory
                 foreach (var change in added)
                 {
                     Log.Debug($"Added {change.Id}");
+
+                    var type = Type.GetType($"Ensage.SDK.Abilities.Items.{change.Id}");
+
+                    if (type == null)
+                    {
+                        Log.Warn($"Item not supported {change.Id}");
+                        continue;
+                    }
+
+                    if (this.Bindings.ContainsKey(type))
+                    {
+                        var item = Activator.CreateInstance(type, change.Item);
+
+                        foreach (var binding in this.Bindings[type])
+                        {
+                            binding.SetValue(item);
+                        }
+                    }
                 }
 
                 foreach (var change in removed)
                 {
                     Log.Debug($"Removed {change.Id}");
+
+                    var type = Type.GetType($"Ensage.SDK.Abilities.Items.{change.Id}");
+
+                    if (type == null)
+                    {
+                        Log.Warn($"Item not supported {change.Id}");
+                        continue;
+                    }
+
+                    if (this.Bindings.ContainsKey(type))
+                    {
+                        foreach (var binding in this.Bindings[type])
+                        {
+                            binding.SetValue(null);
+                        }
+                    }
                 }
 
                 if (removed.Count > 0)
                 {
-                    this.CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removed));
+                    this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removed));
                 }
 
                 if (added.Count > 0)
                 {
-                    this.CollectionChanged.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, added));
+                    this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, added));
                 }
 
                 this.LastItems = this.Items;

@@ -43,38 +43,38 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>C:\EnsageSharp\References\clipper_library.dll</HintPath>
+      <HintPath>D:\Games\Loader\References\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="Ensage">
-      <HintPath>C:\EnsageSharp\References\Ensage.dll</HintPath>
+      <HintPath>D:\Games\Loader\References\Ensage.dll</HintPath>
     </Reference>
     <Reference Include="Ensage.Common">
-      <HintPath>C:\EnsageSharp\References\Ensage.Common.dll</HintPath>
+      <HintPath>D:\Games\Loader\References\Ensage.Common.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>C:\EnsageSharp\References\Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:\Games\Loader\References\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PlaySharp.Toolkit">
-      <HintPath>C:\EnsageSharp\References\PlaySharp.Toolkit.dll</HintPath>
+      <HintPath>D:\Games\Loader\References\PlaySharp.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\EnsageSharp\References\SharpDX.dll</HintPath>
+      <HintPath>D:\Games\Loader\References\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct2D1">
-      <HintPath>C:\EnsageSharp\References\SharpDX.Direct2D1.dll</HintPath>
+      <HintPath>D:\Games\Loader\References\SharpDX.Direct2D1.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D11">
-      <HintPath>C:\EnsageSharp\References\SharpDX.Direct3D11.dll</HintPath>
+      <HintPath>D:\Games\Loader\References\SharpDX.Direct3D11.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\EnsageSharp\References\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>D:\Games\Loader\References\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI">
-      <HintPath>C:\EnsageSharp\References\SharpDX.DXGI.dll</HintPath>
+      <HintPath>D:\Games\Loader\References\SharpDX.DXGI.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Mathematics">
-      <HintPath>C:\EnsageSharp\References\SharpDX.Mathematics.dll</HintPath>
+      <HintPath>D:\Games\Loader\References\SharpDX.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -204,6 +204,7 @@
     <Compile Include="Abilities\IHasTargetModifier.cs" />
     <Compile Include="Abilities\npc_dota_hero_drow_ranger\drow_ranger_marksmanship.cs" />
     <Compile Include="Abilities\npc_dota_hero_drow_ranger\drow_ranger_wave_of_silence.cs" />
+    <Compile Include="Abilities\npc_dota_hero_drow_ranger\npc_dota_hero_drow_ranger.cs" />
     <Compile Include="Abilities\npc_dota_hero_ember_spirit\ember_spirit_activate_fire_remnant.cs" />
     <Compile Include="Abilities\npc_dota_hero_ember_spirit\ember_spirit_fire_remnant.cs" />
     <Compile Include="Abilities\npc_dota_hero_ember_spirit\ember_spirit_flame_guard.cs" />
@@ -276,6 +277,8 @@
     <Compile Include="Abilities\PassiveAbility.cs" />
     <Compile Include="Abilities\RangedAbility.cs" />
     <Compile Include="Abilities\npc_dota_hero_pudge\pudge_meat_hook.cs" />
+    <Compile Include="ComponentModel\EntityComponent.cs" />
+    <Compile Include="ComponentModel\IItemComponent.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Geometry\MEC.cs" />
     <Compile Include="Handlers\Weak\IExecuteWithObject.cs" />

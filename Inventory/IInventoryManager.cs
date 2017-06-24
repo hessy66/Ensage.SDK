@@ -17,6 +17,8 @@ namespace Ensage.SDK.Inventory
 
         HashSet<InventoryItem> Items { get; }
 
+        void Attach(object target);
+
         StockInfo GetStockInfo(AbilityId id, Team team = Team.Undefined);
     }
 }

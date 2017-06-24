@@ -7,13 +7,32 @@ namespace Ensage.SDK.Service
     using System;
     using System.Collections.Generic;
 
+    using Ensage.SDK.Input;
+    using Ensage.SDK.Inventory;
+    using Ensage.SDK.Orbwalker;
+    using Ensage.SDK.Renderer;
+    using Ensage.SDK.Renderer.Particle;
+    using Ensage.SDK.TargetSelector;
+
     using PlaySharp.Toolkit.Helper.Annotations;
 
     public interface IServiceContext : IDisposable
     {
         ContextContainer<IServiceContext> Container { get; }
 
+        Lazy<IInputManager> Input { get; }
+
+        Lazy<IInventoryManager> Inventory { get; }
+
+        Lazy<IOrbwalkerManager> Orbwalker { get; }
+
         Unit Owner { get; }
+
+        Lazy<IParticleManager> Particle { get; }
+
+        Lazy<IRendererManager> Renderer { get; }
+
+        Lazy<ITargetSelectorManager> TargetSelector { get; }
 
         T Get<T>([CanBeNull] string contract = null);
 

@@ -6,6 +6,14 @@ namespace Ensage.SDK.Service
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+
+    using Ensage.SDK.Input;
+    using Ensage.SDK.Inventory;
+    using Ensage.SDK.Orbwalker;
+    using Ensage.SDK.Renderer;
+    using Ensage.SDK.Renderer.Particle;
+    using Ensage.SDK.TargetSelector;
 
     public sealed class EnsageServiceContext : IServiceContext
     {
@@ -25,9 +33,27 @@ namespace Ensage.SDK.Service
 
         public ContextContainer<IServiceContext> Container { get; }
 
+        [Import]
+        public Lazy<IInputManager> Input { get; }
+
+        [Import]
+        public Lazy<IInventoryManager> Inventory { get; }
+
         public string Name { get; }
 
+        [Import]
+        public Lazy<IOrbwalkerManager> Orbwalker { get; }
+
         public Unit Owner { get; }
+
+        [Import]
+        public Lazy<IParticleManager> Particle { get; }
+
+        [Import]
+        public Lazy<IRendererManager> Renderer { get; }
+
+        [Import]
+        public Lazy<ITargetSelectorManager> TargetSelector { get; }
 
         public void Dispose()
         {

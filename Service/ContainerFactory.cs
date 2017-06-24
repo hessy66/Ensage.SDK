@@ -73,6 +73,7 @@ namespace Ensage.SDK.Service
             }
 
             container.ComposeExportedValue<IServiceContext>(context);
+            container.SatisfyImportsOnce(context);
 
             // switch (Drawing.RenderMode)
             // {
