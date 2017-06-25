@@ -23,10 +23,10 @@ namespace Ensage.SDK.Samples
         private static readonly ILog Log = AssemblyLogs.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         [ImportingConstructor]
-        public SampleComponentPlugin([Import] IServiceContext context)
+        public SampleComponentPlugin([Import] IServiceContext context, [Import] Pudge hero)
         {
             this.Context = context;
-            this.Hero = new Pudge(context);
+            this.Hero = hero;
         }
 
         public IServiceContext Context { get; }
@@ -45,11 +45,6 @@ namespace Ensage.SDK.Samples
 
         private void OnUpdate()
         {
-            if (this.Hero == null)
-            {
-                return;
-            }
-
             if (!this.Hero.MeatHook.CanBeCasted)
             {
                 return;
