@@ -26,22 +26,21 @@ namespace Ensage.SDK.Samples
         public SampleComponentPlugin([Import] IServiceContext context)
         {
             this.Context = context;
+            this.Hero = new Pudge(context);
         }
 
         public IServiceContext Context { get; }
 
-        public Pudge Hero { get; private set; }
+        public Pudge Hero { get; }
 
         protected override void OnActivate()
         {
-            this.Hero = new Pudge(this.Context);
             UpdateManager.Subscribe(this.OnUpdate);
         }
 
         protected override void OnDeactivate()
         {
             UpdateManager.Unsubscribe(this.OnUpdate);
-            this.Hero = null;
         }
 
         private void OnUpdate()
